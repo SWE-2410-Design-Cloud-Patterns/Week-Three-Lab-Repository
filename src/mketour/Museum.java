@@ -8,7 +8,9 @@ package mketour;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import mketour.actors.MobileEntity;
+
 
 /**
  * A rectangular area representing an art museum.
@@ -52,10 +54,20 @@ public class Museum implements Taggable {
      */
     @Override
     public void taggedBy(MobileEntity entity) {
-        // TODO: Replace with your code.
-        if (CityMap.DEBUG_LEVEL > 0)
+
+        //        // works on getting the main character
+        //        MobileEntity mainCharacter = CityMap.getMainCharacter();
+        //
+        //        // museum getting tagged by person
+        //        if(entity.isTagged(mainCharacter.getLocation())) {
+        //            System.out.println("Found!");
+        //        }
+
+        if(CityMap.DEBUG_LEVEL > 0)
             System.out.println(this + " was tagged by " + entity);
     }
+
+
 
     /**
      * @return a unique description of this Museum, including a hashcode

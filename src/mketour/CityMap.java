@@ -5,6 +5,8 @@
  */
 package mketour;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mketour.actors.Bus;
 import mketour.actors.Car;
@@ -55,10 +59,19 @@ public class CityMap extends Application {
     private Collection<Taggable> taggables = new ArrayList<>();
 
     private List<MobileEntity> mobileEntities = new ArrayList<>();
+
     private List<Museum> museums = new ArrayList<>();
+    private Text challengeText = new Text();
+    private Text foundText = new Text();
+    private Image artImage = new Image("mketour/img/wood-gatherer.png");
+    private ImageView imageView = new ImageView();
+
+
 
     /** For ease of access, there is a single character accessible as a sort of Singleton. */
     private static MobileEntity mainCharacter = null;
+
+
 
     public static void main(String[] args) {
         launch(args);
@@ -117,6 +130,17 @@ public class CityMap extends Application {
             if(taggable.isTagged(entity.getLocation())) {
                 taggable.taggedBy(entity);
             }
+            if(entity == getMainCharacter()) {
+                for(Museum museum : museums) {
+                    if(museum.isTagged(entity.getLocation())) {
+                        foundText.setText("Found the art!");
+                        foundText.setFont(new Font(20));
+                        imageView.setImage(artImage);
+                        imageView.setFitHeight(100);
+                        imageView.setFitWidth(100);
+                    }
+                }
+            }
         }
     }
 
@@ -136,11 +160,17 @@ public class CityMap extends Application {
      * @param primaryStage The main window.
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         Pane root = new HBox();
         challengePane = new VBox();
         challengePane.setMinWidth(MIN_CHALLENGES_WIDTH);
         Pane mapPane = new Pane();
+        Image image = new Image("mketour/img/wood-gatherer.png");
+
+
+        VBox museumChallenge = new VBox();
+        museumChallenge.getChildren().addAll(challengeText, foundText, imageView);
+
 
         backgroundView.relocate(0,0);
         mapPane.setMaxWidth(backgroundImage.getWidth());
@@ -148,7 +178,10 @@ public class CityMap extends Application {
 
         overlay.getChildren().addAll(backgroundView);
         mapPane.getChildren().addAll(overlay);
-        root.getChildren().addAll(mapPane, challengePane);
+        challengeText.setText("Challenge: Find art");
+        challengeText.setFont(new Font(20));
+        root.getChildren().addAll(mapPane, museumChallenge, challengePane);
+
 
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -203,5 +236,14 @@ public class CityMap extends Application {
         museums.add(new Museum(this));
 
         // TODO: Link in your new Challenges here.
+
+        // art challenge
+
+
+
+
+
+
     }
+
 }
