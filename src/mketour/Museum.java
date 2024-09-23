@@ -1,15 +1,20 @@
 /*
- * Course:     SWE 2410
- * Assignment: MKETour
- * Author:     Dr. Yoder and YOUR NAME HERE
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
  */
+
 package mketour;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import mketour.actors.MobileEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,7 +23,10 @@ import mketour.actors.MobileEntity;
  * The Museum is similar to a MobileEntity, except that it does not move
  * and it has a rectangular rather than circular tag area.
  */
-public class Museum implements Taggable {
+public class Museum implements Taggable, Observable {
+
+    private List<ChallengeObserver> observers = new ArrayList<>();
+    private CityMap cityMap;
     public static final int MUSEUM_WIDTH = 40;
     public static final int MUSEUM_HEIGHT = 50;
     public static final int MUSEUM_LEFT_CORNER = 500-64;
@@ -33,6 +41,31 @@ public class Museum implements Taggable {
 
         cityMap.addNodeToMap(area);
         cityMap.addTaggableToMap(this);
+        this.cityMap = cityMap;
+    }
+
+    /**
+     * method for adding a observer
+     * @param observer observer
+     */
+    public void registerObserver(ChallengeObserver observer) {
+        observers.add(observer);
+        System.out.println("Works!");
+    }
+
+    /**
+     * method for removing a observer
+     * @param observer observer
+     */
+    public void unRegisterObserver(ChallengeObserver observer) {
+        observers.remove(observer);
+        System.out.println("Doesn't Work!");
+    }
+
+    public void notifyObservers() {
+        for(ChallengeObserver observer : observers) {
+            observer.update();
+        }
     }
 
     /**
@@ -55,13 +88,13 @@ public class Museum implements Taggable {
     @Override
     public void taggedBy(MobileEntity entity) {
 
-        //        // works on getting the main character
-        //        MobileEntity mainCharacter = CityMap.getMainCharacter();
-        //
-        //        // museum getting tagged by person
-        //        if(entity.isTagged(mainCharacter.getLocation())) {
-        //            System.out.println("Found!");
-        //        }
+        // works on getting the main character
+        MobileEntity mainCharacter = CityMap.getMainCharacter();
+
+        // museum getting tagged by person
+        if(entity.isTagged(mainCharacter.getLocation())) {
+            notifyObservers();
+        }
 
         if(CityMap.DEBUG_LEVEL > 0)
             System.out.println(this + " was tagged by " + entity);

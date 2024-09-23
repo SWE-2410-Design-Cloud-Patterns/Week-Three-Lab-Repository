@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import mketour.ChallengeObserver;
 import mketour.CityMap;
 
 /**
@@ -47,6 +48,7 @@ public class Person extends MobileEntity {
         }
         super.step();
     }
+
 
     /**
      * The person's Goal - the circular shape on the map that the person approaches.

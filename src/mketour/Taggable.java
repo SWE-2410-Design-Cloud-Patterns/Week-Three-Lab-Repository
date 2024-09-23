@@ -1,3 +1,10 @@
+/*
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
+ */
 package mketour;
 
 import javafx.geometry.Point2D;
@@ -21,4 +28,6 @@ public interface Taggable {
      * @param entity The entity performing the tagging.
      */
     void taggedBy(MobileEntity entity);
+
+
 }

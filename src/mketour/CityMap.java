@@ -1,11 +1,14 @@
 /*
- * Course:     SWE 2410
- * Assignment: MKETour
- * Author:     Dr. Yoder and YOUR NAME HERE
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
  */
 package mketour;
 
-import java.io.FileInputStream;
+
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,9 +65,11 @@ public class CityMap extends Application {
 
     private List<Museum> museums = new ArrayList<>();
     private Text challengeText = new Text();
-    private Text foundText = new Text();
-    private Image artImage = new Image("mketour/img/wood-gatherer.png");
-    private ImageView imageView = new ImageView();
+    private static Text foundText = new Text();
+    private static Image artImage = new Image("mketour/img/wood-gatherer.png");
+    private static ImageView imageView = new ImageView();
+    ArtChallengeObserver artChallengeObserver = new ArtChallengeObserver();
+
 
 
 
@@ -133,16 +138,15 @@ public class CityMap extends Application {
             if(entity == getMainCharacter()) {
                 for(Museum museum : museums) {
                     if(museum.isTagged(entity.getLocation())) {
-                        foundText.setText("Found the art!");
-                        foundText.setFont(new Font(20));
-                        imageView.setImage(artImage);
-                        imageView.setFitHeight(100);
-                        imageView.setFitWidth(100);
+                        museum.registerObserver(artChallengeObserver);
+                        // artChallengeObserver.update();
                     }
                 }
             }
         }
     }
+
+
 
     public double getWidth(){
         return backgroundView.getImage().getWidth();
@@ -160,13 +164,11 @@ public class CityMap extends Application {
      * @param primaryStage The main window.
      */
     @Override
-    public void start(Stage primaryStage) throws FileNotFoundException {
+    public void start(Stage primaryStage) {
         Pane root = new HBox();
         challengePane = new VBox();
         challengePane.setMinWidth(MIN_CHALLENGES_WIDTH);
         Pane mapPane = new Pane();
-        Image image = new Image("mketour/img/wood-gatherer.png");
-
 
         VBox museumChallenge = new VBox();
         museumChallenge.getChildren().addAll(challengeText, foundText, imageView);
@@ -187,6 +189,17 @@ public class CityMap extends Application {
         primaryStage.show();
 
         addEntities();
+    }
+
+    public static void setChallengeText() {
+        foundText.setText("Found!");
+        foundText.setFont(new Font(20));
+    }
+
+    public static void setChallengeImage() {
+        imageView.setImage(artImage);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
     }
 
     /**
@@ -237,13 +250,15 @@ public class CityMap extends Application {
 
         // TODO: Link in your new Challenges here.
 
-        // art challenge
-
-
-
+        for(Museum museum : museums) {
+            if (!museum.isTagged(getMainCharacter().getLocation())) {
+                museum.unRegisterObserver(artChallengeObserver);
+            }
+        }
 
 
 
     }
+
 
 }
