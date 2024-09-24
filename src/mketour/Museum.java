@@ -26,7 +26,7 @@ import java.util.List;
 public class Museum implements Taggable, Observable {
 
     private List<ChallengeObserver> observers = new ArrayList<>();
-    private CityMap cityMap;
+    private final CityMap cityMap;
     public static final int MUSEUM_WIDTH = 40;
     public static final int MUSEUM_HEIGHT = 50;
     public static final int MUSEUM_LEFT_CORNER = 500-64;
@@ -62,9 +62,13 @@ public class Museum implements Taggable, Observable {
         System.out.println("Doesn't Work!");
     }
 
+    /**
+     * method for notifying the observers
+     */
     public void notifyObservers() {
         for(ChallengeObserver observer : observers) {
-            observer.update();
+            System.out.println("Notified the observer, activated the update!");
+            observer.update(CityMap.getMuseums(), CityMap.getMainCharacter());
         }
     }
 

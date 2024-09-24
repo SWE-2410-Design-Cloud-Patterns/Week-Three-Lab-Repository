@@ -63,10 +63,9 @@ public class CityMap extends Application {
 
     private List<MobileEntity> mobileEntities = new ArrayList<>();
 
-    private List<Museum> museums = new ArrayList<>();
+    private static List<Museum> museums = new ArrayList<>();
     private Text challengeText = new Text();
     private static Text foundText = new Text();
-    private static Image artImage = new Image("mketour/img/wood-gatherer.png");
     private static ImageView imageView = new ImageView();
     ArtChallengeObserver artChallengeObserver = new ArtChallengeObserver();
 
@@ -119,7 +118,7 @@ public class CityMap extends Application {
      * @return a copy of the list of the museums found on the map.
      * The areas themselves are NOT copies.
      */
-    public List<Museum> getMuseums() {
+    public static List<Museum> getMuseums() {
         return new ArrayList<>(museums);
     }
 
@@ -131,17 +130,10 @@ public class CityMap extends Application {
      * @param entity The entity doing the tagging.
      */
     public void taggedBy(MobileEntity entity) {
+        artChallengeObserver.update(getMuseums(), getMainCharacter());
         for(Taggable taggable: taggables) {
             if(taggable.isTagged(entity.getLocation())) {
                 taggable.taggedBy(entity);
-            }
-            if(entity == getMainCharacter()) {
-                for(Museum museum : museums) {
-                    if(museum.isTagged(entity.getLocation())) {
-                        museum.registerObserver(artChallengeObserver);
-                        // artChallengeObserver.update();
-                    }
-                }
             }
         }
     }
@@ -191,15 +183,15 @@ public class CityMap extends Application {
         addEntities();
     }
 
-    public static void setChallengeText() {
-        foundText.setText("Found!");
-        foundText.setFont(new Font(20));
+    public static void setChallengeText(String text, int fontSize) {
+        foundText.setText(text);
+        foundText.setFont(new Font(fontSize));
     }
 
-    public static void setChallengeImage() {
+    public static void setChallengeImage(Image artImage, int height, int width) {
         imageView.setImage(artImage);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
+        imageView.setFitWidth(height);
+        imageView.setFitHeight(width);
     }
 
     /**
@@ -249,12 +241,6 @@ public class CityMap extends Application {
         museums.add(new Museum(this));
 
         // TODO: Link in your new Challenges here.
-
-        for(Museum museum : museums) {
-            if (!museum.isTagged(getMainCharacter().getLocation())) {
-                museum.unRegisterObserver(artChallengeObserver);
-            }
-        }
 
 
 
