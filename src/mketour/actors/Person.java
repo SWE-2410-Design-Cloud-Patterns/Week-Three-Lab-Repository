@@ -1,7 +1,9 @@
 /*
- * Course:     SWE 2410
- * Assignment: MKETour
- * Author:     Dr. Yoder and YOUR NAME HERE
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
  */
 package mketour.actors;
 
@@ -11,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import mketour.ChallengeObserver;
 import mketour.CityMap;
 
 /**
@@ -20,15 +21,25 @@ import mketour.CityMap;
  * This person walks straight toward the Goal circle (see inner class).
  */
 public class Person extends MobileEntity {
+    /**
+     * max speed of person
+     */
+    public static final int PERSON_MAX_SPEED = 2;
+    private static final double OPACITY_MULTIPLIER = 0.2;
     private static final Image SMILEY_IMAGE = new Image(CityMap.class.getResource("img/smiley.png")
             .toString());
-    public static final int PERSON_MAX_SPEED = 2;
-    private Goal goal;
 
+    private final Goal goal;
+
+    /**
+     * constructor of Person
+     * @param cityMap cityMap
+     * @param goal goal
+     */
     public Person(CityMap cityMap, Goal goal) {
         super(cityMap, SMILEY_IMAGE);
         setName("You");
-        stepSize = new Point2D(0,0);
+        stepSize = new Point2D(0, 0);
         this.goal = goal;
     }
 
@@ -55,6 +66,9 @@ public class Person extends MobileEntity {
      */
     public static class Goal {
 
+        /**
+         * radius of circle
+         */
         public static final int RADIUS = 100;
         private final Circle circularGoal;
 
@@ -66,7 +80,7 @@ public class Person extends MobileEntity {
         public Goal(CityMap cityMap) {
             circularGoal = new Circle(RADIUS);
             circularGoal.setStroke(Color.GREEN);
-            circularGoal.setFill(Color.GREEN.deriveColor(1, 1, 1, 0.2));
+            circularGoal.setFill(Color.GREEN.deriveColor(1, 1, 1, OPACITY_MULTIPLIER));
             circularGoal.relocate(0, 0);
 
             MouseGestures mg = new MouseGestures();
@@ -76,6 +90,7 @@ public class Person extends MobileEntity {
         }
 
         /**
+         * the getTarget() method
          * @return the center of the circular target
          */
         public Point2D getTarget() {
@@ -86,36 +101,16 @@ public class Person extends MobileEntity {
 
     /**
      * This inner class manages drag gestures on the person's Goal. From [1].
-     *
      * [1] https://stackoverflow.com/questions/27999430/javafx-clickable-line-on-canvas
      */
     private static class MouseGestures {
 
-        private double orgSceneX, orgSceneY;
-        private double orgTranslateX, orgTranslateY;
+        private double orgSceneX;
+        private double orgSceneY;
+        private double orgTranslateX;
+        private double orgTranslateY;
 
-        /** Make the Circle object draggable */
-        private void makeDraggable(Circle circle) {
-            circle.setOnMousePressed(circleOnMousePressedEventHandler);
-            circle.setOnMouseDragged(circleOnMouseDraggedEventHandler);
-        }
-
-        private EventHandler<MouseEvent> circleOnMousePressedEventHandler =
-                (MouseEvent event) -> {
-                    orgSceneX = event.getSceneX();
-                    orgSceneY = event.getSceneY();
-
-                    if (event.getSource() instanceof Circle) {
-                        Circle p = ((Circle) (event.getSource()));
-
-                        orgTranslateX = p.getCenterX();
-                        orgTranslateY = p.getCenterY();
-                    } else {
-                        throw new IllegalArgumentException("Unknown type of object to drag!");
-                    }
-                };
-
-        private EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
+        private final EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
                 (MouseEvent event) -> {
                     double offsetX = event.getSceneX() - orgSceneX;
                     double offsetY = event.getSceneY() - orgSceneY;
@@ -124,7 +119,7 @@ public class Person extends MobileEntity {
                     double newTranslateY = orgTranslateY + offsetY;
 
                     if (event.getSource() instanceof Circle) {
-                        Circle p = ((Circle) (event.getSource()));
+                        Circle p = (Circle) (event.getSource());
 
                         p.setCenterX(newTranslateX);
                         p.setCenterY(newTranslateY);
@@ -132,6 +127,29 @@ public class Person extends MobileEntity {
                         throw new IllegalArgumentException("Unknown type of object to drag!");
                     }
                 };
+
+        private final EventHandler<MouseEvent> circleOnMousePressedEventHandler =
+                (MouseEvent event) -> {
+                    orgSceneX = event.getSceneX();
+                    orgSceneY = event.getSceneY();
+
+                    if (event.getSource() instanceof Circle) {
+                        Circle p = (Circle) (event.getSource());
+
+                        orgTranslateX = p.getCenterX();
+                        orgTranslateY = p.getCenterY();
+                    } else {
+                        throw new IllegalArgumentException("Unknown type of object to drag!");
+                    }
+                };
+
+        /** Make the Circle object draggable */
+        private void makeDraggable(Circle circle) {
+            circle.setOnMousePressed(circleOnMousePressedEventHandler);
+            circle.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+        }
+
+
     }
 
 }

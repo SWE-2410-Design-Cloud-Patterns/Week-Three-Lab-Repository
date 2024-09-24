@@ -5,7 +5,6 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-
 package mketour;
 
 import javafx.geometry.Point2D;
@@ -19,29 +18,50 @@ import java.util.List;
 
 /**
  * A rectangular area representing an art museum.
- *
  * The Museum is similar to a MobileEntity, except that it does not move
- * and it has a rectangular rather than circular tag area.
+ * and, it has a rectangular rather than circular tag area.
  */
 public class Museum implements Taggable, Observable {
 
-    private List<ChallengeObserver> observers = new ArrayList<>();
-    private final CityMap cityMap;
+    /**
+     * museum width
+     */
     public static final int MUSEUM_WIDTH = 40;
+
+    /**
+     * museum height
+     */
     public static final int MUSEUM_HEIGHT = 50;
+
+    /**
+     * museum left corner
+     */
     public static final int MUSEUM_LEFT_CORNER = 500-64;
+
+    /**
+     * museum top corner
+     */
     public static final int MUSEUM_TOP_CORNER = 250+3;
+    private static final double OPACITY_FACTOR = 0.2;
+
+
+    private final List<ChallengeObserver> observers = new ArrayList<>();
+
+
     private final Rectangle area;
 
+    /**
+     * constructor for museum
+     * @param cityMap cityMap
+     */
     public Museum(CityMap cityMap) {
         area = new Rectangle(MUSEUM_WIDTH, MUSEUM_HEIGHT);
         area.setStroke(Color.RED);
-        area.setFill(Color.RED.deriveColor(1, 1, 1, 0.2));
+        area.setFill(Color.RED.deriveColor(1, 1, 1, OPACITY_FACTOR));
         area.relocate(MUSEUM_LEFT_CORNER, MUSEUM_TOP_CORNER);
 
         cityMap.addNodeToMap(area);
         cityMap.addTaggableToMap(this);
-        this.cityMap = cityMap;
     }
 
     /**
@@ -67,7 +87,6 @@ public class Museum implements Taggable, Observable {
      */
     public void notifyObservers() {
         for(ChallengeObserver observer : observers) {
-            System.out.println("Notified the observer, activated the update!");
             observer.update(CityMap.getMuseums(), CityMap.getMainCharacter());
         }
     }
@@ -100,13 +119,15 @@ public class Museum implements Taggable, Observable {
             notifyObservers();
         }
 
-        if(CityMap.DEBUG_LEVEL > 0)
+        if(CityMap.DEBUG_LEVEL > 0) {
             System.out.println(this + " was tagged by " + entity);
+        }
     }
 
 
 
     /**
+     * the toString() method
      * @return a unique description of this Museum, including a hashcode
      */
     @Override

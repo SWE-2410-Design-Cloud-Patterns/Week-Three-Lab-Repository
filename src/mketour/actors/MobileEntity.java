@@ -1,13 +1,14 @@
 /*
- * Course:     SWE 2410
- * Assignment: MKETour
- * Author:     Dr. Yoder and YOUR NAME HERE
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
  */
 package mketour.actors;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +24,7 @@ import mketour.Taggable;
  * Basic functionality to display the item on the cityMap and move in straight lines.
  */
 public abstract class MobileEntity implements Taggable {
+
     /**
      * Height in pixels to show an entity on the cityMap
      */
@@ -60,6 +62,18 @@ public abstract class MobileEntity implements Taggable {
     public static final int TEXT_DISPLAY_FUDGE_FACTOR = 5;
 
     /**
+     * Total number of entities on the map
+     */
+    protected static int instanceCount = 0;
+
+    /**
+     * Velocity. In pixels/step
+     */
+    protected Point2D stepSize;
+
+
+
+    /**
      * The cityMap to which this entity belongs.
      */
     private final CityMap cityMap;
@@ -68,17 +82,10 @@ public abstract class MobileEntity implements Taggable {
      * Position of the center of the entity. In pixels.
      */
     private Point2D location;
-    /**
-     * Velocity. In pixels/step
-     */
-    protected Point2D stepSize;
+
 
     private final ImageView iconView;
 
-    /**
-     * Total number of entities on the map
-     */
-    protected static int instanceCount = 0;
 
     /**
      * A unique name for this entity
@@ -111,13 +118,16 @@ public abstract class MobileEntity implements Taggable {
 
         setPosition();
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), e -> {
             step();
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
+    /**
+     * method for adding to cityMap
+     */
     public void addToCityMap() {
         cityMap.addNodeToMap(iconView);
         cityMap.addNodeToMap(nameText);
@@ -127,7 +137,8 @@ public abstract class MobileEntity implements Taggable {
     protected Point2D chooseRandomInBoundsPoint() {
         return new Point2D(
                 TURNING_MARGIN +
-                        ((cityMap.getWidth() - TURNING_MARGIN - EAST_TURNING_MARGIN) * Math.random()),
+                        ((cityMap.getWidth() - TURNING_MARGIN - EAST_TURNING_MARGIN)
+                                * Math.random()),
                 TURNING_MARGIN +
                         ((cityMap.getHeight() - 2 * TURNING_MARGIN) * Math.random()));
     }
@@ -154,16 +165,19 @@ public abstract class MobileEntity implements Taggable {
      * Move the entity to a given position
      */
     private void setPosition() {
-        double iconCornerX = location.getX() - iconView.boundsInParentProperty().get().getWidth() / 2;
-        double iconCornerY = location.getY() - iconView.boundsInParentProperty().get().getHeight() / 2;
+        double iconCornerX = location.getX() -
+                iconView.boundsInParentProperty().get().getWidth() / 2;
+        double iconCornerY = location.getY() -
+                iconView.boundsInParentProperty().get().getHeight() / 2;
         iconView.relocate(iconCornerX, iconCornerY);
         double textCornerX =
                 location.getX() - nameText.boundsInParentProperty().get().getWidth() / 2;
-        nameText.relocate(textCornerX, location.getY() + (double) HEIGHT / 2 + TEXT_DISPLAY_FUDGE_FACTOR);
+        nameText.relocate(textCornerX, location.getY() + (double) HEIGHT / 2
+                + TEXT_DISPLAY_FUDGE_FACTOR);
     }
 
     /**
-     * Increment by step size and perform basic functions to not walk off screen.
+     * Increment by step size and perform basic functions to not walk off-screen.
      * Also: Tag anything on which we land after the step!
      */
     protected void step() {
@@ -177,7 +191,7 @@ public abstract class MobileEntity implements Taggable {
     }
 
     /**
-     * Turn right if outside of the bounds given.
+     * Turn right if outside the bounds given.
      *
      * @param leftEdge   distance from left edge of map to bounding box in pixels
      * @param rightEdge  distance from left edge of map to right edge of bounding box in pixels
@@ -224,16 +238,17 @@ public abstract class MobileEntity implements Taggable {
      */
     @Override
     public void taggedBy(MobileEntity entity) {
-        //TODO: Replace this printout with your code!
 
-        if (CityMap.DEBUG_LEVEL > 0)
+        if (CityMap.DEBUG_LEVEL > 0) {
             System.out.println(this + " tagged by  " + entity);
+        }
     }
 
 
 
 
     /**
+     * toString() method
      * @return the name of this mobile entity
      */
     @Override

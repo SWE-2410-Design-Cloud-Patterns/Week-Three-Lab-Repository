@@ -1,5 +1,15 @@
+/*
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
+ */
 package mketour;
 
+/**
+ * method for interface
+ */
 public interface Observable {
 
     /**

@@ -7,9 +7,6 @@
  */
 package mketour;
 
-
-import java.awt.*;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,46 +31,59 @@ import mketour.actors.Person;
 /**
  * This application represents a city map which a tourist can explore solving a variety of
  * challenges.
- *
- * The CityMap holds all of the items appearing on the map, populating itself at the beginning of
+ * The CityMap holds all the items appearing on the map, populating itself at the beginning of
  * the game.
- *
  * The basic game framework is based on a SO answer about how to make Canvas elements clickable [1],
  * but in the end, we don't use a Canvas.
- *
  * [1] https://stackoverflow.com/questions/27999430/javafx-clickable-line-on-canvas
  */
 public class CityMap extends Application {
 
+    /**
+     * number of tourists
+     */
     public static final int NUM_TOURISTS = 15;
 
-    // set non-zero to control debugging; return to 0 when demo - critical because this slows simulations
+    /**
+     * set non-zero to control debugging; return to 0 when demo -
+     * critical because this slows simulations
+     */
     public static final int DEBUG_LEVEL = 0;
 
     /** Width of the "challenges" space on the right side of the map in pixels */
     public static final int MIN_CHALLENGES_WIDTH = 250;
+
+    /**
+     * number of buses
+     */
     public static final int NUM_BUSSES = 2;
-    private static Image backgroundImage = new Image(CityMap.class.getResource("img/map.png")
+    private static final int WIDTH = 250;
+    private static final int SPACING = 10;
+    private static final Image BACKGROUND_IMAGE = new Image(CityMap.class.getResource("img/map.png")
             .toString());
-    private Pane overlay = new Pane();
-
-    private ImageView backgroundView = new ImageView(backgroundImage);
-    private Pane challengePane;
-    private Collection<Taggable> taggables = new ArrayList<>();
-
-    private List<MobileEntity> mobileEntities = new ArrayList<>();
-
-    private static List<Museum> museums = new ArrayList<>();
-    private Text challengeText = new Text();
-    private static Text foundText = new Text();
-    private static ImageView imageView = new ImageView();
-    ArtChallengeObserver artChallengeObserver = new ArtChallengeObserver();
-
-
+    private static final Text FOUND_TEXT = new Text();
+    private static final ImageView IMAGE_VIEW = new ImageView();
+    private static final int FONT_SIZE = 20;
+    private static final List<Museum> MUSEUMS = new ArrayList<>();
 
 
     /** For ease of access, there is a single character accessible as a sort of Singleton. */
     private static MobileEntity mainCharacter = null;
+
+    private final Pane overlay = new Pane();
+
+    private final ImageView backgroundView = new ImageView(BACKGROUND_IMAGE);
+    private Pane challengePane;
+    private final Collection<Taggable> taggables = new ArrayList<>();
+
+    private final List<MobileEntity> mobileEntities = new ArrayList<>();
+
+    private final Text challengeText = new Text();
+    private final ArtChallengeObserver artChallengeObserver = new ArtChallengeObserver();
+
+
+
+
 
 
 
@@ -107,6 +117,7 @@ public class CityMap extends Application {
     }
 
     /**
+     * getting the mobile entities
      * @return a copy of list of the mobile entities found on the map. The entities themselves
      * are NOT copies.
      */
@@ -115,16 +126,15 @@ public class CityMap extends Application {
     }
 
     /**
-     * @return a copy of the list of the museums found on the map.
      * The areas themselves are NOT copies.
+     * @return a copy of the list of the museums found on the map.
      */
     public static List<Museum> getMuseums() {
-        return new ArrayList<>(museums);
+        return new ArrayList<>(MUSEUMS);
     }
 
     /**
      * Called by an entity each time it moves.
-     *
      * Causes the entity to tag any entities that it now touches.
      *
      * @param entity The entity doing the tagging.
@@ -150,7 +160,6 @@ public class CityMap extends Application {
 
     /**
      * Set up the basic map layout.
-     *
      * See addEntities() for the fun part (MobileEntities, etc.)
      *
      * @param primaryStage The main window.
@@ -163,17 +172,19 @@ public class CityMap extends Application {
         Pane mapPane = new Pane();
 
         VBox museumChallenge = new VBox();
-        museumChallenge.getChildren().addAll(challengeText, foundText, imageView);
+        museumChallenge.getChildren().addAll(challengeText, FOUND_TEXT, IMAGE_VIEW);
+        museumChallenge.setPrefWidth(WIDTH);
+        museumChallenge.setSpacing(SPACING);
 
 
-        backgroundView.relocate(0,0);
-        mapPane.setMaxWidth(backgroundImage.getWidth());
-        mapPane.setMaxHeight(backgroundImage.getHeight());
+        backgroundView.relocate(0, 0);
+        mapPane.setMaxWidth(BACKGROUND_IMAGE.getWidth());
+        mapPane.setMaxHeight(BACKGROUND_IMAGE.getHeight());
 
         overlay.getChildren().addAll(backgroundView);
         mapPane.getChildren().addAll(overlay);
         challengeText.setText("Challenge: Find art");
-        challengeText.setFont(new Font(20));
+        challengeText.setFont(new Font(FONT_SIZE));
         root.getChildren().addAll(mapPane, museumChallenge, challengePane);
 
 
@@ -183,20 +194,32 @@ public class CityMap extends Application {
         addEntities();
     }
 
+    /**
+     * method for setting the challenge text
+     * @param text text
+     * @param fontSize fontSize
+     */
     public static void setChallengeText(String text, int fontSize) {
-        foundText.setText(text);
-        foundText.setFont(new Font(fontSize));
+        FOUND_TEXT.setText(text);
+        FOUND_TEXT.setFont(new Font(fontSize));
     }
 
+    /**
+     * method for setting the challenge image
+     * @param artImage artImage
+     * @param height height
+     * @param width width
+     */
     public static void setChallengeImage(Image artImage, int height, int width) {
-        imageView.setImage(artImage);
-        imageView.setFitWidth(height);
-        imageView.setFitHeight(width);
+        IMAGE_VIEW.setImage(artImage);
+        IMAGE_VIEW.setFitWidth(height);
+        IMAGE_VIEW.setFitHeight(width);
     }
 
     /**
      * Get the main character Singleton
      * @return the main character (the Person)
+     * @throws RuntimeException runTimeException
      */
     public static MobileEntity getMainCharacter() {
         if(mainCharacter == null) {
@@ -207,25 +230,26 @@ public class CityMap extends Application {
 
     /**
      * Set up all the Mobile and non-mobile Entities on the map.
-     *
      * Also sets up Challenges.
      */
     private void addEntities() {
         // Each entity places itself on the map, so we place the goal first
-        // so it will show at the bottom.
+        // , so it will show at the bottom.
         Person.Goal goal = new Person.Goal(this);
 
         for(int i = 0; i < NUM_TOURISTS; i++) {
             Car car = new Car(this);
-            car.addToCityMap(); // This method can be moved into the Mobile Entity constructor
-                                // for some implementations.
+            // This method can be moved into the Mobile Entity constructor
+            // for some implementations.
+            car.addToCityMap();
             mobileEntities.add(car);
         }
 
         for(int i = 0; i < NUM_BUSSES; i++) {
             Bus bus = new Bus(this);
-            bus.addToCityMap(); // This method can be moved into the Mobile Entity constructor
-                                // for some implementations.
+            // This method can be moved into the Mobile Entity constructor
+            // for some implementations.
+            bus.addToCityMap();
             mobileEntities.add(bus);
         }
 
@@ -238,10 +262,7 @@ public class CityMap extends Application {
             }
         }
 
-        museums.add(new Museum(this));
-
-        // TODO: Link in your new Challenges here.
-
+        MUSEUMS.add(new Museum(this));
 
 
     }

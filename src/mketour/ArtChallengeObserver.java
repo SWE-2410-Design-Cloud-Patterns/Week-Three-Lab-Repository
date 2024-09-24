@@ -1,3 +1,10 @@
+/*
+ * Course: SWE2410
+ * Fall 2024
+ * Lab 3 - Tourist Observer
+ * Name: Jawadul Chowdhury
+ * Submission Date: 9/23/24
+ */
 package mketour;
 
 
@@ -11,7 +18,10 @@ import java.util.List;
  */
 public class ArtChallengeObserver implements ChallengeObserver {
 
-    private static Image artImage = new Image("mketour/img/wood-gatherer.png");
+    private static final Image ART_IMAGE = new Image("mketour/img/wood-gatherer.png");
+    private static final int HEIGHT = 100;
+    private static final int WIDTH = 100;
+    private static final int FONT_SIZE = 20;
 
     /**
      * method for updating
@@ -21,12 +31,10 @@ public class ArtChallengeObserver implements ChallengeObserver {
      */
     @Override
     public void update(List<Museum> museums, MobileEntity mobileEntity) {
-
-        System.out.println("Activated the update!");
         for(Museum museum : museums) {
             if(museum.isTagged(mobileEntity.getLocation())) {
-                CityMap.setChallengeText("Works!", 20);
-                CityMap.setChallengeImage(artImage, 100, 100);
+                CityMap.setChallengeText("Artistic Works Found: ", FONT_SIZE);
+                CityMap.setChallengeImage(ART_IMAGE, HEIGHT, WIDTH);
             }
         }
 

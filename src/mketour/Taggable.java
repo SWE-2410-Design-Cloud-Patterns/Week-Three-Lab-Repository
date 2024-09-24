@@ -12,12 +12,12 @@ import mketour.actors.MobileEntity;
 
 /**
  * Simple interface for all taggable objects.
- *
  * The CityMap uses this class to simplify collision detection.  See the CityMap's taggedBy method.
  */
 public interface Taggable {
 
     /**
+     * method for isTagged()
      * @param location The location to check
      * @return true if this object was tagged by touching that location
      */
