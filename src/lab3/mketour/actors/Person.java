@@ -5,7 +5,7 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-package mketour.actors;
+package lab3.mketour.actors;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import mketour.CityMap;
+import lab3.mketour.CityMap;
 
 /**
  * The main character in the game.

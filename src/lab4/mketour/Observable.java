@@ -5,7 +5,7 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-package mketour;
+package lab4.mketour;
 
 /**
  * method for interface

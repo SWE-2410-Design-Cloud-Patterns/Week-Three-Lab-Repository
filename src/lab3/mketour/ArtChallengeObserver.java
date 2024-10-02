@@ -5,11 +5,11 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-package mketour;
+package lab3.mketour;
 
 
 import javafx.scene.image.Image;
-import mketour.actors.MobileEntity;
+import lab3.mketour.actors.MobileEntity;
 import java.util.List;
 
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ArtChallengeObserver implements ChallengeObserver {
 
-    private static final Image ART_IMAGE = new Image("mketour/img/wood-gatherer.png");
+    private static final Image ART_IMAGE = new Image("lab3/mketour/img/wood-gatherer.png");
     private static final int HEIGHT = 100;
     private static final int WIDTH = 100;
     private static final int FONT_SIZE = 20;

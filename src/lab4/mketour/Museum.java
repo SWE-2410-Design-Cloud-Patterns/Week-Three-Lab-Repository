@@ -5,12 +5,12 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-package mketour;
+package lab4.mketour;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import mketour.actors.MobileEntity;
+import lab4.mketour.actors.MobileEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,7 @@ public class Museum implements Taggable, Observable {
      */
     public void notifyObservers() {
         for(ChallengeObserver observer : observers) {
-            observer.update(CityMap.getMuseums(), CityMap.getMainCharacter());
+            observer.update(CityMap.getMobileEntities());
         }
     }
 

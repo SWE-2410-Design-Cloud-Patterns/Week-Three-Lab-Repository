@@ -5,10 +5,10 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-package mketour;
+package lab4.mketour;
 
 import javafx.geometry.Point2D;
-import mketour.actors.MobileEntity;
+import lab4.mketour.actors.MobileEntity;
 
 /**
  * Simple interface for all taggable objects.

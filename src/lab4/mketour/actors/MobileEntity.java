@@ -1,11 +1,11 @@
 /*
  * Course: SWE2410
  * Fall 2024
- * Lab 3 - Tourist Observer
+ * Lab 4 - Tourist Observer
  * Name: Jawadul Chowdhury
- * Submission Date: 9/23/24
+ * Submission Date: 9/30/24
  */
-package mketour.actors;
+package lab4.mketour.actors;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,12 +15,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import mketour.CityMap;
-import mketour.Taggable;
+import lab4.mketour.BusChallengeObserver;
+import lab4.mketour.CityMap;
+import lab4.mketour.MSOEChallengeObserver;
+import lab4.mketour.Taggable;
+
 
 /**
  * Represents anything that can move around town.
- *
  * Basic functionality to display the item on the cityMap and move in straight lines.
  */
 public abstract class MobileEntity implements Taggable {
@@ -70,6 +72,9 @@ public abstract class MobileEntity implements Taggable {
      * Velocity. In pixels/step
      */
     protected Point2D stepSize;
+
+    private final MSOEChallengeObserver msoeChallengeObserver = new MSOEChallengeObserver();
+    private final BusChallengeObserver busChallengeObserver = new BusChallengeObserver();
 
 
 
@@ -239,9 +244,20 @@ public abstract class MobileEntity implements Taggable {
     @Override
     public void taggedBy(MobileEntity entity) {
 
+        Point2D mainCharacterLocation = CityMap.getMainCharacter().getLocation();
+
+        if(entity instanceof Car && this instanceof Car && this.isTagged(mainCharacterLocation)) {
+            msoeChallengeObserver.update(CityMap.getMobileEntities());
+        }
+
+        if(entity instanceof Bus && this instanceof Bus && this.isTagged(mainCharacterLocation)) {
+            busChallengeObserver.update(CityMap.getMobileEntities());
+        }
+
         if (CityMap.DEBUG_LEVEL > 0) {
             System.out.println(this + " tagged by  " + entity);
         }
+
     }
 
 

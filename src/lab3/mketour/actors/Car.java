@@ -5,10 +5,10 @@
  * Name: Jawadul Chowdhury
  * Submission Date: 9/23/24
  */
-package mketour.actors;
+package lab3.mketour.actors;
 
 import javafx.scene.image.Image;
-import mketour.CityMap;
+import lab3.mketour.CityMap;
 
 import java.util.HashSet;
 import java.util.Random;
